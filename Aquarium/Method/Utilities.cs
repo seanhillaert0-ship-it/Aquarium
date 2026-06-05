@@ -1,5 +1,6 @@
 ﻿using Aquarium.Classe;
 using Aquarium.Enum;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Aquarium.Method
 {
@@ -40,9 +41,15 @@ namespace Aquarium.Method
                         Console.WriteLine(C);
                     }
                     bool ChoixCarnivore = Carnivore.TryParse(Console.ReadLine(), out Carnivore poissonCarnivore);
+                    Console.WriteLine("what is the age of your fish ?");
+                    int Age = int.Parse(Console.ReadLine());
 
-                    CarnivorousFish CarnivorousFish1 = new CarnivorousFish(name, sexe, 10,poissonCarnivore);
+                    CarnivorousFish CarnivorousFish1 = new CarnivorousFish(name, sexe, 10, 0, poissonCarnivore);
+                    if(CarnivorousFish1 != null)
+                    {
+
                     MyFishInTheTank.Add(CarnivorousFish1);
+                    }
                     Console.Clear();
 
                 }
@@ -56,8 +63,13 @@ namespace Aquarium.Method
                     }
 
                     bool ChoixHerbivore = Herbivore.TryParse(Console.ReadLine(), out Herbivore poissonHerbivore);
-                    HerbivorousFish HerbivorousFish1 = new HerbivorousFish(name, sexe, 10, poissonHerbivore);
-                    MyFishInTheTank.Add(HerbivorousFish1);
+                    Console.WriteLine("what is the age of your fish ?");
+                    int Age = int.Parse(Console.ReadLine());
+                    HerbivorousFish HerbivorousFish1 = new HerbivorousFish(name, sexe, 10,0, poissonHerbivore);
+                    if (HerbivorousFish1 != null)
+                    {
+                        MyFishInTheTank.Add(HerbivorousFish1);
+                    }
                     Console.Clear();
 
                 }
@@ -105,7 +117,9 @@ namespace Aquarium.Method
                 {
                     Console.WriteLine("How many of this seaweed variety do you want ?");
                     int nombre = int.Parse(Console.ReadLine());
-                    Seaweed algue = new Seaweed(algueChoisie, nombre, 10);
+                    Console.WriteLine("what is the age of your seaweed ?");
+                    int Age = int.Parse(Console.ReadLine());
+                    Seaweed algue = new Seaweed(algueChoisie, nombre, 10, Age);
                     SeaWeedInMyTank.Add(algue);
                     Console.Clear();
                 }
@@ -224,8 +238,36 @@ namespace Aquarium.Method
 
 
             }
+            
+            
 
         }
+        public static void AgeFishesAndSeaweed()
+        {
+            foreach (Fishes f in MyFishInTheTank)
+            {
+                f.Age += 1;
+                Console.WriteLine("this is the current age of " + f.Name + " : " + f.Age);
+             if (f.Age > 20)
+                {
+                    Console.WriteLine("this fish is too old and dies : " + f.Name);
+                    MyFishInTheTank.Remove(f);
+                }
+            }
+            foreach (Seaweed s in SeaWeedInMyTank)
+            {
+                s.Age += 1;
+                Console.WriteLine("this is the current age of " + s.Variete + " : " + s.Age);
+                if (s.Age > 20)
+                {
+                    Console.WriteLine("this seaweed is too old and dies : " + s.Variete);
+                    SeaWeedInMyTank.Remove(s);
+                }
+
+            }
+        }
+
+
         int day = 0;
         public static void PlayingSimulation()
         {
@@ -263,6 +305,7 @@ namespace Aquarium.Method
                 {
 
                     eatFish(f);
+                    AgeFishesAndSeaweed();
                 }
 
 
