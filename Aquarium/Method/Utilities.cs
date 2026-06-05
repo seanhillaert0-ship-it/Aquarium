@@ -41,7 +41,7 @@ namespace Aquarium.Method
                     }
                     bool ChoixCarnivore = Carnivore.TryParse(Console.ReadLine(), out Carnivore poissonCarnivore);
 
-                    CarnivorousFish CarnivorousFish1 = new CarnivorousFish(name, sexe, poissonCarnivore);
+                    CarnivorousFish CarnivorousFish1 = new CarnivorousFish(name, sexe, 10,poissonCarnivore);
                     MyFishInTheTank.Add(CarnivorousFish1);
                     Console.Clear();
 
@@ -56,7 +56,7 @@ namespace Aquarium.Method
                     }
 
                     bool ChoixHerbivore = Herbivore.TryParse(Console.ReadLine(), out Herbivore poissonHerbivore);
-                    HerbivorousFish HerbivorousFish1 = new HerbivorousFish(name, sexe, poissonHerbivore);
+                    HerbivorousFish HerbivorousFish1 = new HerbivorousFish(name, sexe, 10, poissonHerbivore);
                     MyFishInTheTank.Add(HerbivorousFish1);
                     Console.Clear();
 
@@ -105,7 +105,7 @@ namespace Aquarium.Method
                 {
                     Console.WriteLine("How many of this seaweed variety do you want ?");
                     int nombre = int.Parse(Console.ReadLine());
-                    Seaweed algue = new Seaweed(algueChoisie, nombre);
+                    Seaweed algue = new Seaweed(algueChoisie, nombre, 10);
                     SeaWeedInMyTank.Add(algue);
                     Console.Clear();
                 }
@@ -142,7 +142,7 @@ namespace Aquarium.Method
             {
                 if (f is CarnivorousFish carnivore)
                 {
-                    if (MyFishInTheTank.Count > 1)
+                    if (MyFishInTheTank.Count > 1 && carnivore.Pv <= 5)
                     {
                         int indexAuHasard;
                         Fishes poissonCible;
@@ -152,18 +152,47 @@ namespace Aquarium.Method
                             indexAuHasard = rand.Next(0, MyFishInTheTank.Count);
                             poissonCible = MyFishInTheTank[indexAuHasard];
                         } while (poissonCible == carnivore);
+                        if (poissonCible.Pv == 0)
+                        {
 
-                        Console.WriteLine($"The carnivore {carnivore.Name} is eating {poissonCible.Name}");
-                        MyFishInTheTank.RemoveAt(indexAuHasard);
+                            Console.WriteLine($"The carnivore {carnivore.Name} is eating {poissonCible.Name}");
+                            MyFishInTheTank.RemoveAt(indexAuHasard);
+                            carnivore.Pv += 5;
+                        }
+                        else
+                        {
+                            poissonCible.Pv -= 4;
+                            Console.WriteLine($"The carnivore {carnivore.Name} is attacking {poissonCible.Name} and loses 5 Pv ");
+                            carnivore.Pv += 5;
+                        }
                     }
                 }
                 else if (f is HerbivorousFish herbivore)
                 {
 
-                    if (SeaWeedInMyTank.Count > 0)
+                    if (SeaWeedInMyTank.Count > 0 && herbivore.Pv <= 5)
                     {
-                        Console.WriteLine($"The herbivore {herbivore.Name} is eating the seaweed");
-                        SeaWeedInMyTank.RemoveAt(0);
+                        int indexAuHasard;
+                        Seaweed algueCible;
+                        do
+                        {
+                            indexAuHasard = rand.Next(0, SeaWeedInMyTank.Count);
+                            algueCible = SeaWeedInMyTank[indexAuHasard];
+                        } while (algueCible.Pv == 0);
+                        if (algueCible.Pv == 0)
+                        {
+                            Console.WriteLine($"The herbivore {herbivore.Name} is eat the seaweed {algueCible.Variete}");
+                            SeaWeedInMyTank.RemoveAt(indexAuHasard);
+                            herbivore.Pv += 3;
+
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("the herbivore " + herbivore.Name + " is eating the seaweed " + algueCible.Variete + " and the seaweed loses 2 Pv");
+                            algueCible.Pv -= 2;
+                            herbivore.Pv += 3;
+                        }
                     }
                 }
             }
@@ -171,7 +200,7 @@ namespace Aquarium.Method
         public static void Menu()
         {
             Console.WriteLine("Welcome to your aquarium");
-            Console.WriteLine("Do you want to add a fish or a seaweed to your tank 1 for fish, 2 for seaweed, 3 for playing the simulation");
+            Console.WriteLine("Do you want to add a fish or a seaweed to your tank 1 for fish, 2 for seaweed, 3 for playing the simulation, 4 for exiting");
             int choix = int.Parse(Console.ReadLine());
             switch (choix)
             {
@@ -184,62 +213,79 @@ namespace Aquarium.Method
                 case 3:
                     PlayingSimulation();
                     break;
+                case 4:
+                    Console.WriteLine("thank you for playing");
+                    break;
                 default:
                     Console.WriteLine("invalid choice");
                     break;
 
 
 
+
             }
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
+        int day = 0;
         public static void PlayingSimulation()
         {
-            
-            Console.WriteLine("Resume of the day :");
-            Console.WriteLine("This is all the carinivorous fishes in your tank :");
-            foreach (CarnivorousFish carnivore in MyFishInTheTank)
+
+            for (int i = 0; i < 10000000; i++)
             {
-                Console.WriteLine($"Name : {carnivore.Name}, Gender : {carnivore.Gender},Race : {carnivore.Carnivore}");
-            }
-            Console.WriteLine("this is all the herbivorous fishes in your tank :");
-            foreach (HerbivorousFish herbivore in MyFishInTheTank)
-            {
-                Console.WriteLine($"Name : {herbivore.Name}, Gender : {herbivore.Gender}, Race : {herbivore.Herbivore}");
-            }
-            Console.WriteLine("this is all the seaweed in your tank :");
-            foreach (Seaweed g in SeaWeedInMyTank)
-            {
-                Console.WriteLine($"Number : {g.Number}, Variety : {g.Variete}");
-            }
-            Console.WriteLine("do you want to continue to the next day yes/no");
-            string continuer = Console.ReadLine();
-            if (continuer.ToLower() == "yes")
-            {
-                Console.Clear();
-                PlayingSimulation();
-            }
-            else
-            {
-                Console.WriteLine("thank you for playing");
-            }
+                Console.WriteLine("Day " + (i));
+                Console.WriteLine("Resume of the day :");
+                Console.WriteLine("This is all the carinivorous fishes in your tank :");
+                foreach (CarnivorousFish carnivore in MyFishInTheTank)
+                {
+                    Console.WriteLine($"Name : {carnivore.Name}, Gender : {carnivore.Gender},Race : {carnivore.Carnivore}");
+                }
+                Console.WriteLine("this is all the herbivorous fishes in your tank :");
+                foreach (HerbivorousFish herbivore in MyFishInTheTank)
+                {
+                    Console.WriteLine($"Name : {herbivore.Name}, Gender : {herbivore.Gender}, Race : {herbivore.Herbivore}");
+                }
+                Console.WriteLine("this is all the seaweed in your tank :");
+                foreach (Seaweed g in SeaWeedInMyTank)
+                {
+                    Console.WriteLine($"Number : {g.Number}, Variety : {g.Variete}");
+                }
+                foreach (Fishes f in MyFishInTheTank)
+                {
+                    f.Pv -= 1;
+                    Console.WriteLine("this is the current Pv of " + f.Name + " : " + f.Pv);
+                }
+                foreach (Seaweed s in SeaWeedInMyTank)
+                {
+                    s.Pv += 2;
+                    Console.WriteLine("this is the current Pv of " + s.Variete + " : " + s.Pv);
+                }
+                foreach (Fishes f in MyFishInTheTank)
+                {
+
+                    eatFish(f);
+                }
+
+
+                
+
+                Console.WriteLine("do you want to continue to the next day yes/no");
+                string continuer = Console.ReadLine();
+                if (continuer.ToLower() == "yes")
+                {
+                    Console.Clear();
+                    PlayingSimulation();
+                }
+                else
+                {
+                    Remenu();
+                }
 
 
 
 
+
+
+            }
         }
 
        
@@ -259,3 +305,11 @@ namespace Aquarium.Method
         }
     }
 }
+
+
+
+
+
+
+
+

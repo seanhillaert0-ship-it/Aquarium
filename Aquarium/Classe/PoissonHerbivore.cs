@@ -4,7 +4,7 @@ namespace Aquarium.Classe
 {
     public class HerbivorousFish : Fishes
     {
-        public HerbivorousFish(string name, string gender,Herbivore herbivore) : base(name, gender)
+        public HerbivorousFish(string name, string gender, int pv, Herbivore herbivore) : base(name, gender, pv)
         {
             this.Herbivore = herbivore;
         }
@@ -12,7 +12,7 @@ namespace Aquarium.Classe
     }
     public class Sole : HerbivorousFish
     {
-        public Sole(string name, string gender, Herbivore herbivore) : base(name, gender, herbivore)
+        public Sole(string name, string gender, int pv, Herbivore herbivore) : base(name, gender, pv, herbivore)
         {
 
 
@@ -21,7 +21,7 @@ namespace Aquarium.Classe
     public class SeaBass : HerbivorousFish
 
     {
-        public SeaBass(string name, string gender, Herbivore herbivore) : base(name, gender, herbivore)
+        public SeaBass(string name, string gender, int pv, Herbivore herbivore) : base(name, gender, pv, herbivore)
         {
 
 
@@ -29,7 +29,7 @@ namespace Aquarium.Classe
     }
     public class Carpe : HerbivorousFish
     {
-        public Carpe(string name, string gender, Herbivore herbivore) : base(name, gender, herbivore)
+        public Carpe(string name, string gender, int pv, Herbivore herbivore) : base(name, gender, pv, herbivore)
         {
 
 
