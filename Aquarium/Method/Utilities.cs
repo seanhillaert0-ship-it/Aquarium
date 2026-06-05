@@ -244,7 +244,7 @@ namespace Aquarium.Method
         }
         public static void AgeFishesAndSeaweed()
         {
-            foreach (Fishes f in MyFishInTheTank)
+            foreach (Fishes f in MyFishInTheTank.ToList())
             {
                 f.Age += 1;
                 Console.WriteLine("this is the current age of " + f.Name + " : " + f.Age);
@@ -254,7 +254,7 @@ namespace Aquarium.Method
                     MyFishInTheTank.Remove(f);
                 }
             }
-            foreach (Seaweed s in SeaWeedInMyTank)
+            foreach (Seaweed s in SeaWeedInMyTank.ToList())
             {
                 s.Age += 1;
                 Console.WriteLine("this is the current age of " + s.Variete + " : " + s.Age);
@@ -277,14 +277,20 @@ namespace Aquarium.Method
                 Console.WriteLine("Day " + (i));
                 Console.WriteLine("Resume of the day :");
                 Console.WriteLine("This is all the carinivorous fishes in your tank :");
-                foreach (CarnivorousFish carnivore in MyFishInTheTank)
+                foreach (Fishes fish in MyFishInTheTank)
                 {
-                    Console.WriteLine($"Name : {carnivore.Name}, Gender : {carnivore.Gender},Race : {carnivore.Carnivore}");
+                    if (fish is CarnivorousFish carnivore)
+                    {
+                        Console.WriteLine($"Name : {carnivore.Name}, Gender : {carnivore.Gender},Race : {carnivore.Carnivore}");
+                    }
                 }
                 Console.WriteLine("this is all the herbivorous fishes in your tank :");
-                foreach (HerbivorousFish herbivore in MyFishInTheTank)
+                foreach (Fishes fish in MyFishInTheTank)
                 {
-                    Console.WriteLine($"Name : {herbivore.Name}, Gender : {herbivore.Gender}, Race : {herbivore.Herbivore}");
+                    if (fish is HerbivorousFish herbivore)
+                    {
+                        Console.WriteLine($"Name : {herbivore.Name}, Gender : {herbivore.Gender}, Race : {herbivore.Herbivore}");
+                    }
                 }
                 Console.WriteLine("this is all the seaweed in your tank :");
                 foreach (Seaweed g in SeaWeedInMyTank)
